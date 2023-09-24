@@ -235,16 +235,13 @@ fun RegistryPage(context: Context) {
 fun CollectionsPage(name:String, context:Context) {
     Column (modifier= Modifier
         .fillMaxSize()
-        .background(Color.White), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
+        .background(Color.White)){
         LazyColumn(modifier=Modifier.fillMaxSize()){
-            items(count=5){
+            items(count=8){
                 index ->  Row(verticalAlignment = Alignment.CenterVertically) {
                 ClickableText(text = AnnotatedString("Item $index"), onClick = {Toast.makeText(context,"Clicked item $index",Toast.LENGTH_SHORT).show()},modifier= Modifier
                     .padding(16.dp)
                     .weight(1f))
-//                    Text(text = "Item $index", modifier= Modifier
-//                        .padding(16.dp)
-//                        .weight(1f))
                 Spacer(modifier = Modifier.padding(8.dp))
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Save")
