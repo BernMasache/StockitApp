@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -32,7 +33,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,18 +43,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.stockitapp.ui.theme.StockitAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -89,12 +87,8 @@ class MainActivity : ComponentActivity() {
                                     tabPage = it
                                 }
                             }
-
-
                         }
                     ) {
-
-
                         Column (horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
                             Spacer(modifier = Modifier.padding(72.dp))
 
@@ -110,37 +104,27 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//fun RegistryPage(name:String) {
-//    Column (modifier= Modifier
-//        .fillMaxSize()
-//        .background(Color.LightGray), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
-//        Text(text = name)
-//    }
-//}
-
-
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistryPage(context: Context) {
     var amount by remember {
-        mutableStateOf(0)
+        mutableStateOf("")
     }
     var numberOfDays by remember {
-        mutableStateOf(0)
+        mutableStateOf("")
     }
     var shopShare by remember {
-        mutableStateOf(0)
+        mutableStateOf("")
     }
     var otherExpenses by remember {
-        mutableStateOf(0)
+        mutableStateOf("")
     }
     var description by remember {
         mutableStateOf("")
     }
     var rentalFare by remember {
-        mutableStateOf(0)
+        mutableStateOf("")
     }
 
     var dateCollected by remember {
@@ -165,11 +149,11 @@ fun RegistryPage(context: Context) {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())) {
         OutlinedTextField(value = amount.toString(), onValueChange = {
-                it->amount=it.toInt()
-        },label = { Text("Amount") } ,modifier = Modifier.fillMaxWidth())
+                it-> amount= it
+        },label = { Text("Amount") } ,modifier = Modifier.fillMaxWidth(),keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
         OutlinedTextField(value = numberOfDays.toString(), onValueChange = {
-                it->numberOfDays=it.toInt()
-        }, label = { Text("Number of days") },modifier = Modifier.fillMaxWidth())
+                it->numberOfDays= it
+        }, label = { Text("Number of days") },modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
         ExposedDropdownMenuBox(expanded = isExpanded, onExpandedChange = {isExpanded=it}) {
             OutlinedTextField(
@@ -201,17 +185,13 @@ fun RegistryPage(context: Context) {
                 })
             }
         }
-        OutlinedTextField(value = rentalFare.toString(), onValueChange = {
-                it->numberOfDays=it.toInt()
-        }, label = { Text("Rental monthly fare") },modifier = Modifier.fillMaxWidth())
-
         OutlinedTextField(value = shopShare.toString(), onValueChange = {
-                it->shopShare=it.toInt()
-        }, label = { Text("Shop share") },modifier = Modifier.fillMaxWidth())
+                it->shopShare=it
+        }, label = { Text("Shop share") },modifier = Modifier.fillMaxWidth(),keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
         OutlinedTextField(value = otherExpenses.toString(), onValueChange = {
-                it->otherExpenses=it.toInt()
-        }, label = { Text("Other expenses") },modifier = Modifier.fillMaxWidth())
+                it->otherExpenses=it
+        }, label = { Text("Other expenses") },modifier = Modifier.fillMaxWidth(),keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
         OutlinedTextField(value = description, onValueChange = {
                 it->description=it
@@ -229,7 +209,6 @@ fun RegistryPage(context: Context) {
 
     }
 }
-
 
 @Composable
 fun CollectionsPage(name:String, context:Context) {
