@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -45,7 +48,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.stockitapp.model.CollectionModel
 import com.example.stockitapp.ui.theme.StockitAppTheme
+import com.example.stockitapp.view.CollectionsItem
+import com.example.stockitapp.viewModel.CollectionViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
@@ -55,6 +61,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 
 class MainActivity : ComponentActivity() {
+    val collectionViewModel by viewModels<CollectionViewModel>()
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
@@ -91,11 +98,14 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Column (horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
                             Spacer(modifier = Modifier.padding(72.dp))
-
+                            collectionViewModel.getCollections()
                             when(tabPage.ordinal){
-                                0-> CollectionsPage(name = tabPage.name,this@MainActivity)
+                                0-> CollectionsPage(name = tabPage.name, collectionsList = collectionViewModel.collectionsResponse, this@MainActivity)
                                 1-> RegistryPage(this@MainActivity)
+
                             }
+
+
                         }
                     }
                 }
@@ -211,24 +221,19 @@ fun RegistryPage(context: Context) {
 }
 
 @Composable
-fun CollectionsPage(name:String, context:Context) {
+fun CollectionsPage(name:String, collectionsList:List<CollectionModel>, context:Context) {
+//    Log.d("Data",collectionsList.toString())
     Column (modifier= Modifier
         .fillMaxSize()
         .background(Color.White)){
-        LazyColumn(modifier=Modifier.fillMaxSize()){
-            items(count=8){
-                index ->  Row(verticalAlignment = Alignment.CenterVertically) {
-                ClickableText(text = AnnotatedString("Item $index"), onClick = {Toast.makeText(context,"Clicked item $index",Toast.LENGTH_SHORT).show()},modifier= Modifier
-                    .padding(16.dp)
-                    .weight(1f))
-                Spacer(modifier = Modifier.padding(8.dp))
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Save")
+            LazyColumn(modifier=Modifier.fillMaxSize()){
+                item {  }
+                itemsIndexed(items=collectionsList){
+                        index, item ->  CollectionsItem(collectionModel = item)
                 }
             }
-                Divider()
-            }
-        }
+
+
     }
 
 }
